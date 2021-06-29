@@ -46,3 +46,4 @@ void articulation_points() {
 	if (!vis[i])
 		arti_dfs(i, 0);
 }
+                                                                                                                  

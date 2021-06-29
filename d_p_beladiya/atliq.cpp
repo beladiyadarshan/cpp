@@ -13,7 +13,7 @@ int main()
 
 	#ifndef ONLINE_JUDGE
      freopen("input.c","r",stdin);
-     freopen("output.c","w",stdout);
+     freopen("output.txt","w",stdout);
     #endif
 
 

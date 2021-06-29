@@ -1,4 +1,4 @@
-/*
+  /*
 	Given an unordered list of flights taken by someone, each represented as (origin, destination) pairs, and a starting airport, compute the person's itinerary. If no such itinerary exists, return null. If there are multiple possible itineraries, return the lexicographically smallest one. All flights must be used in the itinerary.
 For example, given the list of flights [('SFO', 'HKO'), ('YYZ', 'SFO'), ('YUL', 'YYZ'), ('HKO', 'ORD')] and starting airport 'YUL', you should return the list ['YUL', 'YYZ', 'SFO', 'HKO', 'ORD'].
 Given the list of flights [('SFO', 'COM'), ('COM', 'YYZ')] and starting airport 'COM', you should return null.
@@ -24,18 +24,36 @@ vector<string> jawab;
  		ticket[source].erase(ticket[source].begin());
  		dfs(temp);
  	}
-    
+    	cout<<source<<" ";
  	jawab.pb(source);
  }
+void print(int i)
+{
+	if(i==5)
+		return;
+	i++;
+
+	cout<<i;
+
+	print(i);
+	i--;
+	cout<<i;
+	
+
+}
 int32_t main()
 {
+	#ifndef ONLINE_JUDGE
+     freopen("input.c","r",stdin);
+     freopen("output.txt","w",stdout);
+    #endif
 
 
      jawab.clear();
      ticket.clear();
      int n;
      cin>>n;
-    
+   
 	for(int i=0;i<n;i++)
 	{
 		string s1,s2;
@@ -46,19 +64,14 @@ int32_t main()
 
 
 	}
-	dfs("a");
+	dfs("JFK");
 	
 
-	if(jawab.size()!=n+1)
-	{
-		cout<<0<<endl;
-	}   
-    else
-    {
-	for(int i=jawab.size()-1;i>=0;i--)cout<<jawab[i]<<" ";
-	}	
+	
+	 for(int i=jawab.size()-1;i>=0;i--)cout<<jawab[i]<<" ";
+	
     
-
+	 	print(0);
 
 		
 

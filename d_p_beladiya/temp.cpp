@@ -1,44 +1,59 @@
-#include<bits/stdc++.h>
-using  namespace std;
-#define PI pair<int,int>
-#define ff first
-#define ss second
+#include <bits/stdc++.h>
+using namespace std;
+#define mod 1000000007
+#define ll long long
 
-bool comp(PI a,PI b)
-{
-	if(a.ff>b.ff)
-		return true;
-	return false;
-}
-int main()
-{
 
-	#ifndef ONLINE_JUDGE
-		freopen("input.txt","r",stdin);
-		freopen("output.c","w",stdout);
-	#endif
+int32_t main() {
 
-	int t;
-	cin>>t;
+   #ifndef ONLINE_JUDGE
+     freopen("input.c","r",stdin);
+     freopen("output.txt","w",stdout);
+    #endif
+  ios_base::sync_with_stdio(false);
+  cin.tie(NULL);
+  
+  int test;
+  cin >> test;
 
-	while(t--)
-	{
-	
-	int N, M; cin >> N >> M;
-    map<int,int> cnt;
-    for(int i=0;i<N;i++) {
-        int X; cin >> X; cnt[X%M]++;
+  while (test--) {
+    int n;
+    cin>>n;
+   vector<int> a(n),d(n),pre(n);
+
+   for(auto &i:a){cin>>i;}
+
+    for(int i=0;i<n;i++)pre[i]=a[i];
+    for(auto &i:d)cin>>i;
+
+
+    int ans=INT_MIN;
+
+    for(int i=0;i<n;i++)
+    {
+      
+      if((i+d[i])<n)
+      {
+        
+      
+      pre[i+d[i]]-=a[i];
     }
-    int ans = 0;
-    if (cnt[0]) ans++;
-    if (M%2==0 && cnt[M/2]) ans++;
-    for(int i=1;i<(M+1)/2;i++){
-        int X = min(cnt[i], cnt[M-i]), Y = max(cnt[i], cnt[M-i]);
-        if (Y == 0) continue;
-        ans += max(1, Y-X);
-    }
-    cout << ans << endl;
-	}
+    }  
 
-	return 0;
+    for(int i=0;i<n;i++)
+    {
+      if(i>0)
+        pre[i]+=pre[i-1];
+     
+      ans=max(ans,pre[i]);
+    }
+
+    cout<<ans<<endl;
+
+  }  
+
+  return 0;
+  
+ 
 }
+ 

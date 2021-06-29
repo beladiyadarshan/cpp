@@ -20,7 +20,8 @@ using namespace std;
 #define MAXN   200002 
 long long  mod_pow(long long  a,long long  b,long long  M = mod)
 {
-    long long  ans = 1;
+    long long  ans
+     = 1;
     
     while(b)
     {
@@ -155,7 +156,7 @@ public:
         n = _n;
         bit.assign(n + 1, 0);
     }
-
+    //x=index
     void update(int x, int val){
         for(; x <= n; x += x & (-x)) bit[x] += val;
     }
@@ -163,8 +164,8 @@ public:
     int query(int x){
         int ret = 0;
         for(; x; x -= x & (-x)) ret += bit[x];
-
         return ret;
+
     }
 
     int query(int l, int r){
@@ -191,7 +192,7 @@ int32_t main()
 
     #ifndef ONLINE_JUDGE
    freopen("input.c","r",stdin);
-   freopen("output.c","w",stdout);
+   freopen("output.txt","w",stdout);
   #endif
 
 
@@ -199,32 +200,18 @@ int32_t main()
 
   cin >> n >> q;
 
-  ds.init(n);
+  ds.init(n+1);
 
   for(int i = 1; i <= n; i++){
     int x; cin >> x;
-    ds.update(x, 1);
+    ds.update(i, x);
   }
 
-  while(q--){
-    int x; cin >> x;
+ 
+  ds.update(3,4);
 
-    if(x < 0){
-      x = -x;
+ cout<<ds.query(3);
 
-      del(x);
-    } else {
-      ds.update(x, 1);
-    }
-  }
-
-  int ans = 0;
-
-  for(int i = 1; i <= n; i++) if(ds.query(i)) {ans = i; break;}
-  
-  cout << ans << "\n";
-
-  return 0;
 
   return 0;
 }

@@ -1,5 +1,6 @@
-vector<int> order; //Stores the Topological Order
-
+ vector<int> order; //Stores the Topological Order
+int n, m;
+vector <vector <int> > g;
 bool toposort(int n) //Returns 1 if there exists a toposort, 0 if there is a cycle
 {   
     queue<int> q;

@@ -21,3 +21,5 @@ int ncr(int N, int R)
     int jawab = ((fact[N] * facinverse[R]) % mod * facinverse[N - R]) % mod; 
     return jawab; 
 }
+
+
