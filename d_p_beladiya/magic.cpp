@@ -60,7 +60,7 @@ void dfs(int u,int &jawab,int par = 0)
     //for(auto i:temp)cout<<i<<" ";cout<<endl;
 
     for(auto i:temp)
-      {
+      {            
         int dif=h-i;
         int mul=mod(dif*i);
         ret=mod(ret+mul);

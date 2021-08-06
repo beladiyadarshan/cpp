@@ -1,74 +1,72 @@
-#include <bits/stdc++.h>
-using namespace std;
-#define mod 1000000007
-#define ll long long
-#define PI pair<string,string>
-#define ff first
-#define ss second
-int mods(int a, int m=mod)
-{
-    return (a%m + m) % m;
-}
-int add(int x, int y){ 
-  x += y; 
-  if(x >= mod) 
-    x -= mod; 
-  return x;
-}
-int sub(int x, int y){
- x -= y; 
- if(x < 0) 
-  x += mod; 
-return x;
-}
-int mul(int x, int y){ 
-  return (x * 1ll * y) % mod;
-}
+static async getHomeInternetGraphDetails(params) {
+    const { filters, lastUpdatedDate, months, trendMonth } = params;
+    let { pastMonths } = params;
 
-int  mod_pow(int  a,int  b,int  M = mod)
-{
-    int  jawab = 1;
-    
-    while(b)
-    {
-        if(b&1) jawab=(jawab*a)%M;
-        a=(a*a)%M;
-        b>>=1;
+    const homeInternetDf = await DailyStatementService.getHomeInternetDf(filters);
+
+    const monthDataGroup = homeInternetDf.groupby(['month_year']);
+
+    const hasTrendMonthData = Object.keys(monthDataGroup.col_dict).includes(
+      trendMonth[0]
+    );
+
+    const pastMonthsDataColumns = [
+      'home_sales_rate',
+      'total_sales',
+      'home_sales',
+    ];
+    pastMonths = pastMonths.filter((pastMonth) =>
+      Object.keys(monthDataGroup.col_dict).includes(pastMonth)
+    );
+    let trendAndPastMonthsData = this.getTrendAndPastMonthsData({
+      monthDataGroup,
+      trendMonth,
+      pastMonths,
+      pastMonthsDataColumns,
+      filters,
+    });
+
+    if (hasTrendMonthData) {
+      const trendingDate = utils.getTrendingValueDate({
+        filterMonth: trendMonth[0],
+        lastUpdatedDate,
+      });
+
+      const { daysInMonth, day } = trendingDate;
+
+      const linerTrend = this.getLinearTrend({
+        monthData: trendAndPastMonthsData,
+        pastMonths,
+        targetAchievementColumn: 'home_sales_rate',
+        targetAchievementTrendingColumn: 'home_sales_rate',
+      });
+
+      trendAndPastMonthsData = this.addLinearTrend({
+        monthData: trendAndPastMonthsData,
+        linerTrend,
+      });
+    } else {
+      trendAndPastMonthsData.addColumn({
+        column: 'is_linear_trend',
+        value: Array(trendAndPastMonthsData.shape[0]).fill(-1),
+      });
     }
-    
-    return jawab;
-}
 
-int mod_inv(int a){
- return mod_pow(a, mod - 2);
-}
+    trendAndPastMonthsData = danfoUtils.addEmptyColumn(
+      trendAndPastMonthsData,
+      ['level'],
+      filters.level
+    );
 
-int get(int x, int b) {
+    if (filters.level && filters.level === 'employee') {
+      trendAndPastMonthsData = await this.addEmployeeDetails(
+        trendAndPastMonthsData,
+        filters
+      );
+    }
 
-  int start = (1 << b);
-
-  if (start > x) return 0;
-
-  int d = x - start + 1;
-
-  int temp = start * (d / (2 * start)) ;
-  temp+= min(start, (d % (2 * start)));
-
-  return temp;
-}
-vector <vector <pair <int,int> > > adjlst, mst;
-
-int32_t main() {
-
-   #ifndef ONLINE_JUDGE
-     freopen("input.c","r",stdin);
-     freopen("output.txt","w",stdout);
-    #endif
-  ios_base::sync_with_stdio(false);
-  cin.tie(NULL);
-  
- 
-mst.assign(4, vector <pair <int,int> > (0));
-for(int i=0;i<4;i++)cout<<mst[i]<<endl;
-}
- 
+    const result = await trendAndPastMonthsData.to_json();
+    return {
+      data: JSON.parse(result),
+    };
+  }
